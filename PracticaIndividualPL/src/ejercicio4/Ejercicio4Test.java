@@ -18,7 +18,7 @@ public class Ejercicio4Test {
 		System.out.println("========APARTADO A ==========");
 		ConnectivityInspector<Monumento, Tiempo> conexo =
 				new ConnectivityInspector<Monumento,Tiempo>(gfND);
-		System.out.println("Â¿Es el grafo conexo?: " +Ejercicio4.esConexo(conexo));
+		System.out.println("¿Es el grafo conexo?: " +Ejercicio4.esConexo(conexo));
 		System.out.println("Las componentes conexas son : { "+conexo.connectedSets() +" }" );
 		
 				

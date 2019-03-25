@@ -106,7 +106,4 @@ public class Ejercicio4 {
 		 return GraphsReader.newGraph(filesName,
 				 					Monumento::create, Tiempo::create,
 				 					()->new SimpleDirectedGraph<Monumento, Tiempo>(Tiempo.class));
-	}
-	
-	
-}
+	}}
