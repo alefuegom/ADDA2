@@ -20,53 +20,51 @@ import us.lsi.graphs.GraphsReader;
 public class Ejercicio4 {
 
 
-	 static String visitarMonumentos(Graph<Monumento, Tiempo> g, Graph<Monumento, Tiempo> g2, List<Monumento> l) {
-		 //Con este método se puede determinar dado un grafo y una lista de monumentos a visitar:
-		 //Si los monumentos estan conectados entre si, y si lo están te devuelve la ruta más optima.
-		 
-		Double tiempo = 0.0;
-		List<Monumento> m = new ArrayList<Monumento>();
-		ShortestPathAlgorithm<Monumento, Tiempo> gfND = new DijkstraShortestPath<Monumento, Tiempo>(g);
-		ShortestPathAlgorithm<Monumento, Tiempo> gfD = new DijkstraShortestPath<Monumento, Tiempo>(g2);
-		
-		for (int i = 0; i < l.size() - 1; i++) {
-			GraphPath<Monumento, Tiempo> rutaND = gfND.getPath(l.get(i), l.get(i + 1));
-			GraphPath<Monumento, Tiempo> rutaD = gfD.getPath(l.get(i), l.get(i + 1));
-			
-			if (rutaND == null) {
-				return "No es posible según el grafo de conexiones visitar : " + l.toString();
-				}
-			
-			else if (rutaD == null) {
-				return "No es posible según el grafo de precedencias visitar en tal orden : " + l.toString();
-				}
-			
-			else {
-				for (Tiempo t : rutaND.getEdgeList()) {
-					tiempo = tiempo + t.getMinutos();
+	public static String visitarMonumentos(Graph<Monumento, Tiempo> g, Graph<Monumento, Tiempo> g2, List<Monumento> l) {
+        //Con este mÃ©todo se puede determinar dado un grafo y una lista de monumentos a visitar:
+        //Si los monumentos estan conectados entre si, y si lo estÃ¡n te devuelve la ruta mÃ¡s optima.
 
-					Monumento m1 = t.getM1();
-					Monumento m2 = t.getM2();
+       Double tiempo = 0.0;
+       List<Monumento> m = new ArrayList<Monumento>();
 
-					if (!m.contains(m1))
-						m.add(m1);
-					if (!m.contains(m2))
-						m.add(m2);
-				}
-		}
+       ShortestPathAlgorithm<Monumento, Tiempo> gfND = new DijkstraShortestPath<Monumento, Tiempo>(g);
+       ShortestPathAlgorithm<Monumento, Tiempo> gfD = new DijkstraShortestPath<Monumento, Tiempo>(g2);
+       for (int i = 0; i < l.size() - 1; i++) {
+           GraphPath<Monumento, Tiempo> rutaND = gfND.getPath(l.get(i), l.get(i + 1));
+           GraphPath<Monumento, Tiempo> rutaD = gfD.getPath(l.get(i), l.get(i + 1));
 
 
-		}
-		return "Visita de "+l.toString()+" respetando el orden con menor tiempo + "
-				+ "("+ tiempo +" mins): \n"+l.toString() ;
-		
-		
+           if (rutaND == null) {
+               return "No es posible segÃºn el grafo de conexiones visitar : " + l.toString();
+               }
+
+           else if (rutaD == null) {
+               return "No es posible segÃºn el grafo de precedencias visitar en tal orden : " + l.toString();
+               }
+
+           else {
+               List<Tiempo> aux = rutaND.getEdgeList();
+               for (Tiempo t : aux) {
+                   tiempo += t.getMinutos();
+
+                   Monumento m1 = t.getM1();
+                   Monumento m2 = t.getM2();
+
+                   if (!m.contains(m1))
+                       m.add(m1);
+                   if (!m.contains(m2))
+                       m.add(m2);
+               }
+       }
+
+
+       }
+       return "Visita de "+l.toString()+" respetando el orden con menor tiempo + "
+               + "("+ tiempo +" mins): \n"+m.toString();
 	}
 
-
-
 	static List<Monumento> primerosMonumentos(Graph<Monumento, Tiempo> g2) {
-		//Con este método podemos saber que monumentos o vértices no reciben ninguna arista, por lo tanto
+		//Con este mï¿½todo podemos saber que monumentos o vï¿½rtices no reciben ninguna arista, por lo tanto
 		//tienen que ser los primeros en visitarse.
 		
 		List<Monumento> res = new ArrayList<Monumento>();
@@ -84,7 +82,7 @@ public class Ejercicio4 {
 
 
 	 static String esConexo(ConnectivityInspector<Monumento, Tiempo> conexo) {
-		 //Este método formatea la devolución del método isConnected()
+		 //Este mï¿½todo formatea la devoluciï¿½n del mï¿½todo isConnected()
 		 
 		 if(conexo.isConnected()==false)
 			return "NO";
@@ -94,14 +92,14 @@ public class Ejercicio4 {
 	}
 
 	static Graph<Monumento, Tiempo> uploadGraphNotDirected(String filesName) {
-		// Carga un grafo no dirigido a través de un fichero de texto
-		 return GraphsReader.newGraph(filesName,
-				 					Monumento::create, Tiempo::create,
-				 					()->new SimpleWeightedGraph<Monumento, Tiempo>(Monumento::create,Tiempo::create));
+		// Carga un grafo no dirigido a travï¿½s de un fichero de texto
+		return GraphsReader.newGraph(filesName,
+                Monumento::create, Tiempo::create,
+                ()->new SimpleWeightedGraph<Monumento, Tiempo>(Monumento::create,Tiempo::create),Tiempo::getMinutos);
 	}
 	
 	 static Graph<Monumento, Tiempo> uploadGraphDirected(String filesName) {
-			// Carga un grafo dirigido a través de un fichero de texto
+			// Carga un grafo dirigido a travï¿½s de un fichero de texto
 		// TODO Auto-generated method stub
 		 return GraphsReader.newGraph(filesName,
 				 					Monumento::create, Tiempo::create,

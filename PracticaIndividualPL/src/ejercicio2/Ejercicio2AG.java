@@ -1,79 +1,79 @@
 package ejercicio2;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.SimpleWeightedGraph;
+
 
 import tipos.*;
-
 import us.lsi.ag.IndexChromosome;
-import us.lsi.graphs.GraphsReader;
+import us.lsi.ag.IndexProblemAG;
+import us.lsi.ag.agchromosomes.BinaryChromosome;
 
-public class Ejercicio2AG {
-	
-	private List<Monumento> monumentos;
-	private Graph<Monumento, Tiempo> grafo;
-	private static Double PESO_TOTAL;
 
-	public Ejercicio2AG(String g) {
-		// TODO Auto-generated constructor stub
-		grafo = cargaGrafo(g);
-		monumentos = new ArrayList<Monumento>(grafo.vertexSet());
-		PESO_TOTAL = grafo.edgeSet().stream().mapToDouble(Tiempo::getMinutos).sum();
-	}
+
+public class Ejercicio2AG implements IndexProblemAG<List<Tarea>> {
 	
-	private Graph<Monumento, Tiempo> cargaGrafo(String fichero) {
-		// TODO Auto-generated method stub
-		Supplier<Graph<Monumento, Tiempo>> creator =
-				()-> new SimpleWeightedGraph<Monumento,Tiempo>(Monumento::create, Tiempo::create);
+	
+	private  List<Tarea> tareas;
+	private  Integer procesadores;
+	
+	
+	public Ejercicio2AG(List<Integer> Tareaes, Integer procesadores, List<Tarea> tareas) {
 		
-		return GraphsReader.newGraph(fichero, Monumento::create, Tiempo::create,
-				creator, Tiempo::getMinutos);
-	}
-	
-	public Double fitnessFunction(IndexChromosome cr) {
-		// If it considered an irreal edge, it will be punished
-		List<Monumento> sol = getSolucion(cr);
-		return - sumaPeso(sol);
+		this.tareas = tareas;
+		this.procesadores = procesadores;
 	}
 	
 	
+	@Override
 	public Integer getObjectsNumber() {
-		//Primero tengo que saber cuantos Objetos tengo
-		return grafo.vertexSet().size();
-	}
-	
-	
-	private Double  sumaPeso(List<Monumento> sol) {
-		// TODO Auto-generated method stub
-		return IntStream.range(0, monumentos.size()-1).boxed().
-				mapToDouble(i -> pesoArista(monumentos.get(i), monumentos.get(i+1))).sum();
-		
+		return tareas.size();
 	}
 
-	private Double pesoArista(Monumento m1, Monumento m2) {
-		if(grafo.containsEdge(m1,m2)) {
-			return grafo.getEdge(m1, m2).getMinutos();
-		}else {
-			return PESO_TOTAL;
-		}
-	
-	}
-	
-	public List<Monumento> getSolucion(IndexChromosome cr) {
+
+	@Override
+	public Double fitnessFunction(IndexChromosome cr) {
 		// TODO Auto-generated method stub
-		List<Integer> chromosome = cr.decode();
-		List<Monumento> res = new ArrayList<>();
-		for (Integer i : chromosome) {
-			res.add(monumentos.get(i));
-		}
-		res.add(res.get(0));
+		Double k = 0.0;
+		Double res = 0.0;
+		Integer duracion = 0;
+		List<Tarea> l = getSolucion(cr);
 		
+		for(int i=0;i<l.size();i++) {
+		 for(int j= 0; i<procesadores;j++) {
+		Tarea t = l.get(i);
+		//TODO
+			 
+		 } 
+		 }
+		
+		
+	return res;	
+	}
+
+
+	@Override
+	public List<Tarea> getSolucion(IndexChromosome cr) {
+		List<Integer> cromo = cr.decode();
+		List<Tarea> res = new ArrayList<Tarea>();
+		
+		for (int i = 0; i < cromo.size(); i++) {
+			res.add(tareas.get(cromo.get(i)));
+		}
 		return res;
 	}
+	
+	
+	
+	
+	
+	
+
+	
+	
 
 }

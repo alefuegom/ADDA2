@@ -17,18 +17,7 @@ public class Ejercicio2AG_Test {
 
 		getConditions();
 		
-		// TODO 
-		IndexProblemAG<List<Monumento>> problem =
-				new Ejercicio2AG("./files/graph.txt");
-		AlgoritmoAG<IndexChromosome> alg = 
-				AlgoritmoAG.<IndexChromosome>create(ChromosomeType.IndexPermutation, problem);
-		alg.ejecuta();
-		
-		IndexChromosome bestSolution = alg.getBestChromosome();
-		System.out.println("=============================");
-		System.out.println("Way :" +problem.getSolucion(bestSolution));
-		System.out.println("Cost: "+ problem.fitnessFunction(bestSolution)*-1);
-		System.out.println("=================================");}
+	}
 	
 	private static void getConditions() {
 		AlgoritmoAG.ELITISM_RATE = 0.2;
