@@ -6,12 +6,12 @@ public class Tarea {
 	
 
 	private Integer duracion;	
-	private Integer id = 0;
+	private Integer id;
 	
-	public Tarea(Integer duracion) {
+	public Tarea(Integer duracion, Integer id) {
 		super();
 		this.duracion = duracion;
-		this.id = id+1;
+		this.id = id;
 	}
 	
 	public Integer getDuracion() {
@@ -20,6 +20,12 @@ public class Tarea {
 	public Integer getId() {
 		return id;
 	}
+
+	@Override
+	public String toString() {
+		return "t"+this.getId() +" (" + this.getDuracion()+ ")";
+	}
+	
 	
 	
 	
