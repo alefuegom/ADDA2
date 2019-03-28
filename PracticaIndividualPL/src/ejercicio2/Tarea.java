@@ -1,23 +1,24 @@
 package ejercicio2;
 
-import java.util.List;
+
 
 public class Tarea {
+	
 
 	private Integer duracion;	
-	private List<Integer> procesador;
+	private Integer id = 0;
 	
-	public Tarea(Integer duracion, List<Integer> procesador) {
+	public Tarea(Integer duracion) {
 		super();
 		this.duracion = duracion;
-		this.procesador = procesador;
+		this.id = id+1;
 	}
 	
 	public Integer getDuracion() {
 		return duracion;
 	}
-	public List<Integer> getProcesador() {
-		return procesador;
+	public Integer getId() {
+		return id;
 	}
 	
 	

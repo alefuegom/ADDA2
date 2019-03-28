@@ -1,123 +1,87 @@
 package ejercicio2;
 
-
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import org.jgrapht.Graph;
-
-
-import tipos.*;
-import us.lsi.ag.IndexChromosome;
-import us.lsi.ag.IndexProblemAG;
+import java.util.*;
 import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
-import us.lsi.ag.agchromosomes.BinaryChromosome;
 
 
 
-public class Ejercicio2AG implements IndexProblemAG<List<Tarea>> {
+
+public class Ejercicio2AG implements ValuesInRangeProblemAG<Integer, Map<Integer, List<Tarea>>> {
 	
 	
 	private  List<Tarea> tareas;
-	private  Integer procesadores;
+	private  Integer numProcesadores;
 	
 	
 	public Ejercicio2AG(List<Tarea> tareas, Integer procesadores) {
 		
 		this.tareas = tareas;
-		this.procesadores = procesadores;
+		this.numProcesadores = procesadores;
 	}
-	
-	
 	@Override
-	public Integer getObjectsNumber() {
+	public Integer getVariableNumber() {
+
 		return tareas.size();
 	}
 
-	
-	private Double restriccionDuracionTareas(List<List<Integer>> duracionProcesadores, Double duracion) {
-		Double res = 0.;
-		Integer aux= 0;
-		for(List<Integer> i : duracionProcesadores) {
-			for(int j = 0; j<i.size(); j++) {
-				aux = aux + i.get(j);
-	
-			}
-			if(aux>duracion) {
-				res = duracion;
-			}
-		}
-		return res;
-		
-		
-	}
-	
-	private Double restriccionNumeroProcesador(List<Tarea> tareas) {
-		Double res = 0.;
-		for(Tarea t : tareas) {
-			if(t.getProcesador().size()>1) {
-				res = res + t.getProcesador().size();
-			}
-			
-		}
-		return res;
-	}
 
-
-
-	
-	public Double fitnessFunction(IndexChromosome cr) {
+	@Override
+	public Integer getMax(Integer i) {
 		// TODO Auto-generated method stub
-		Double k = 1000000.0;
-		Double res = 0.0;
-		Double duracion = 0.;
-		List<List<Integer>> duracionProcesadores = new ArrayList<List<Integer>>();
-		List<Integer> duracionProcesador = new ArrayList<Integer>();
-		List<Tarea> l = getSolucion(cr);
-	
-		for(Tarea t: l) {
-			Integer aux = t.getDuracion();
-			Integer p = t.getProcesador().get(0);
-			duracionProcesador.add(aux);
-			duracionProcesadores.add(p, duracionProcesador);
-			duracion = duracion +aux;
-		 }
-		Integer max = 0;
-		Integer aux = 0;
-		for(int i = 0;i<duracionProcesadores.size(); i++) {
-			
-			for(int j = 0; j<duracionProcesador.size();j++) {
-				aux = aux + duracionProcesador.get(j);	
-			}
-			if(aux>max) {
-				max = aux;
-			}	
+		i = 0;
+		for(Tarea t:tareas) {
+			i = i + t.getDuracion();
 		}
-		
-		res = duracion - max;
-		
-		
-		res = -res -k*(Math.pow((restriccionDuracionTareas(duracionProcesadores, duracion)), 2)+
-				Math.pow(restriccionNumeroProcesador(l), 2));
-		
-		
-		
-	return res;	
+		return i;
 	}
-	
-	public List<Tarea> getSolucion(IndexChromosome cr) {
-		List<Integer> cromo = cr.decode();
-		List<Tarea> res = new ArrayList<Tarea>();
+
+
+	@Override
+	public Integer getMin(Integer i) {
+		i = 0;
+		return i;
+	}
+
+
+	@Override
+	public Double fitnessFunction(ValuesInRangeChromosome<Integer> cr) {
+		List<Integer> l = cr.decode();
+		Integer duracion = 0;
+		Integer duracionSecuencial = this.getMax(0);
+		Integer max = 0;
 		
-		for (int i = 0; i < cromo.size(); i++) {
-			Integer aux = cromo.get(i);
-			tareas.get(i).getProcesador().add(aux);
-			res.add(tareas.get(i));
+		for(int i=0;i<numProcesadores;i++) {
+			
+			for(int j =0;j<l.size();j++) {
+				if(l.get(j) == i) {
+					duracion = duracion + tareas.get(j).getDuracion();
+					}	
+			}
+			
+		if(duracion>max) {
+				max = duracion;
 		}
-		return res;
+			
+		}
+		
+		
+		return (double) (duracionSecuencial-max);
+	}
+
+
+	@Override
+	public Map<Integer, List<Tarea>> getSolucion(ValuesInRangeChromosome<Integer> cr) {
+		List<Integer> l = cr.decode();
+		Map<Integer, List<Tarea>> mapa = new HashMap<Integer, List<Tarea>>();
+		for(int i = 0; i<l.size();i++) {
+			Tarea t = tareas.get(i);
+			List<Tarea> lt = mapa.get(i);
+			lt.add(t);
+			mapa.put(i, lt);
+		}
+		return mapa;
+		
 	}
 	
 	
