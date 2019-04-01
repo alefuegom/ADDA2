@@ -1,24 +1,13 @@
 package ejercicio2;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
+import java.util.*;
 import ejercicio2.Ejercicio2AG;
-import tipos.*;
-
-import us.lsi.ag.IndexChromosome;
-import us.lsi.ag.IndexProblemAG;
-import us.lsi.ag.ValuesInRangeChromosome;
 import us.lsi.ag.ValuesInRangeProblemAG;
-import us.lsi.ag.agchromosomes.AlgoritmoAG;
-import us.lsi.ag.agchromosomes.RangeChromosome;
+import us.lsi.ag.agchromosomes.*;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
-import us.lsi.ag.agstopping.StoppingConditionFactory.StoppingConditionType;
-import us.lsi.ag.anuncios.ProblemaAnunciosAG;
-import us.lsi.anuncios.datos.DatosAnuncios;
-import us.lsi.anuncios.datos.ListaDeAnunciosAEmitir;
+
 
 public class Ejercicio2AG_Test {
 
