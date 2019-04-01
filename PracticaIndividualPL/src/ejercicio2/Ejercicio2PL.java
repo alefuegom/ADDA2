@@ -2,42 +2,28 @@ package ejercicio2;
 
 import java.util.*;
 
+import us.lsi.common.Files2;
 import us.lsi.lpsolve.solution.*;
 
 public class Ejercicio2PL {
 	
 	public static int procesadores = 2;
-	public static int tareas = 5;
-	public static List<Integer> duraciones = new ArrayList<Integer>();
 	
-
-	
-//	Tareas y procesadores: dada una lista de m tareas, con duraciones d={d1..dm}, y un conjunto
-//			de n procesadores, buscar la asignación de tareas a procesadores tal que el tiempo total de ejecución
-//			sea mínimo.
-//			Como ejemplo concreto, teniendo 2 procesadores p0 y p1, y 5 tareas t0..t4 con duraciones d={5,
-//			4, 6, 3, 2}, la solución óptima sería asignar al procesador p0 las tareas t0, t3 y t4 (con duraciones
-//			5 + 3 + 2 = 10) y al procesador p1 las tareas t1 y t2 (duraciones 4 + 6 = 10).
-
 
 	public static void main(String[] args) {
-		duraciones.add(5);
-		duraciones.add(4);
-		duraciones.add(6);
-		duraciones.add(3);
-		duraciones.add(2);
-	
-	
+		List<String> s = Files2.getLines("./ficheros/tareasProcesadores.txt");
+		List<Integer> tareas = getTareas(s);
+		
 		System.out.println("INFORMACIÓN: EL PRIMER NUMERO DESPUES DE LA X SIGNIFICA LA TAREA EN CUESTIÓN, Y EL SEGUNDO NUMERO EL PROCESADOR");
 		System.out.println("\nEJEMPLO I: X00 = 1.0 => LA TAREA 0 HA SIDO ASIGNADA AL PROCESADOR 0");
 		System.out.println("EJEMPLO II: X00 = 0.0 => LA TAREA 0 NO HA SIDO ASIGNADA AL PROCESADOR 0\n");
 		
 		
-		SolutionPLI s = AlgoritmoPLI.getSolution(getConstraints());
+		SolutionPLI sol = AlgoritmoPLI.getSolution(getConstraints(tareas, procesadores));
 		System.out.println("==SOLUCIÓN GENERADA DESDE ECLIPSE==");
-		System.out.println("\nSolucion del problema planteado: " +s.getGoal() +" (unidad de tiempo)");	
-		for(int i=0;i<s.getNumVar();i++) {
-			System.out.println(s.getName(i)+" = "+s.getSolution()[i]);
+		System.out.println("\nSolucion del problema planteado: " +sol.getGoal() +" (unidad de tiempo)");	
+		for(int i=0;i<sol.getNumVar();i++) {
+			System.out.println(sol.getName(i)+" = "+sol.getSolution()[i]);
 		}
 		
 		System.out.println("\n");
@@ -46,34 +32,44 @@ public class Ejercicio2PL {
 		
 		SolutionPLI a = AlgoritmoPLI.getSolutionFromFile("./ficheros/solucionLineal.txt");
 		System.out.println("Solucion del problema planteado: " +a.getGoal() +" (unidad de tiempo)");	
-		for(int i=0;i<s.getNumVar();i++) {
-			System.out.println(s.getName(i)+" = "+s.getSolution()[i]);}
+		for(int i=0;i<a.getNumVar();i++) {
+			System.out.println(a.getName(i)+" = "+a.getSolution()[i]);}
 	
 
 
 
 	}
 	
-	
-	public static String getConstraints(){
-		Integer durMax = 0;
-		for(int i= 0; i<duraciones.size(); i++) {
-			durMax = durMax + duraciones.get(i);
+
+	private static List<Integer> getTareas(List<String> s) {
+		List<Integer> res = new ArrayList<Integer>();
+		String[] ls = s.get(0).split(",");
+		for(String l : ls) {
+			Integer aux = Integer.parseInt(l);
+			res.add(aux);
 		}
-		Integer m = tareas;
-		Integer n = procesadores;
-		List<Integer> d = duraciones;
-		Integer size = d.size();
+		
+		
+	return res;
+}
+
+
+	public static String getConstraints(List<Integer> tareas, Integer numProcesadores){
+		Integer durMax = 0;
+		for(int i= 0; i<tareas.size(); i++) {
+			durMax = durMax + tareas.get(i);
+		}
+		
 		
 		String r = "min: T;"; //Funcion minimo
 		r = r+"\n\n";
 		
-		for (int j = 0; j<n;j++) {
-		for(int i = 0; i<size; i++) {
-			if(i == size -1) {
-				r = r + String.format(" "+duraciones.get(i)+" x%d%d", i,j);
+		for (int j = 0; j<numProcesadores;j++) {
+		for(int i = 0; i<tareas.size(); i++) {
+			if(i == tareas.size() -1) {
+				r = r + String.format(" "+tareas.get(i)+" x%d%d", i,j);
 			}else {
-			r = r + String.format(" "+duraciones.get(i)+" x%d%d", i,j);
+			r = r + String.format(" "+tareas.get(i)+" x%d%d", i,j);
 			r = r+ " + " ;}
 			
 			}	
@@ -85,9 +81,9 @@ public class Ejercicio2PL {
 		
 			
 		
-		for(int i = 0; i<size; i++) {
-			for(int j = 0;j<n;j++) {
-				if(j == n-1 ) {
+		for(int i = 0; i<tareas.size(); i++) {
+			for(int j = 0;j<numProcesadores;j++) {
+				if(j == numProcesadores-1 ) {
 			r = r + String.format("x%d%d",i,j);
 			}
 				else {
@@ -105,9 +101,9 @@ public class Ejercicio2PL {
 		r = r + "T <= "+durMax +";";
 		r = r+"\n"+"int T;";
 		 r =r+"\n"+ "bin ";
-		for(int i = 0; i<size; i++) {
-		for(int j = 0;j<n;j++) {
-			if(j==n-1 && i==size-1) {
+		for(int i = 0; i<tareas.size(); i++) {
+		for(int j = 0;j<numProcesadores;j++) {
+			if(j==numProcesadores-1 && i==tareas.size()-1) {
 				r = r + String.format("x%d%d",i,j );
 			}
 			else {
