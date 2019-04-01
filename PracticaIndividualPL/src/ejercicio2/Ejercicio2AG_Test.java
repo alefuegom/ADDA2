@@ -48,9 +48,8 @@ public class Ejercicio2AG_Test {
 		
 		RangeChromosome bestSolution = alg.getBestChromosome();
 		System.out.println("=============================");
-		System.out.println("Tiempo : "+ problem.fitnessFunction(bestSolution));
-		System.out.println("Solucion :" +problem.getSolucion(bestSolution));
-		System.out.println("Tiempo : "+ problem.fitnessFunction(bestSolution));
+		System.out.println("Tiempo calculado más optimo : "+ problem.fitnessFunction(bestSolution));
+		System.out.println("Asignación de las tareas a los procesadores:" +problem.getSolucion(bestSolution));
 		System.out.println("=================================");}
 		
 	

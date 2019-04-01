@@ -62,8 +62,8 @@ public class Ejercicio2AG implements ValuesInRangeProblemAG<Integer, Map<Integer
 			
 		}
 		
-		
-		return (double) (this.getMaxTime() - max)*-1;
+		Double aux = (double) (this.getMaxTime() - max);
+		return aux ;
 	}
 
 
