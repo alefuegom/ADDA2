@@ -7,12 +7,14 @@ import us.lsi.lpsolve.solution.*;
 
 public class Ejercicio2PL {
 	
-	public static int procesadores = 2;
+	
 	
 
 	public static void main(String[] args) {
+		
 		List<String> s = Files2.getLines("./ficheros/tareasProcesadores.txt");
 		List<Integer> tareas = getTareas(s);
+		Integer procesadores = getNumProcesadores(s);
 		
 		System.out.println("INFORMACIÓN: EL PRIMER NUMERO DESPUES DE LA X SIGNIFICA LA TAREA EN CUESTIÓN, Y EL SEGUNDO NUMERO EL PROCESADOR");
 		System.out.println("\nEJEMPLO I: X00 = 1.0 => LA TAREA 0 HA SIDO ASIGNADA AL PROCESADOR 0");
@@ -41,9 +43,15 @@ public class Ejercicio2PL {
 	}
 	
 
+	private static Integer getNumProcesadores(List<String> s) {
+		String ls = s.get(0);
+		return Integer.parseInt(ls);
+	}
+
+
 	private static List<Integer> getTareas(List<String> s) {
 		List<Integer> res = new ArrayList<Integer>();
-		String[] ls = s.get(0).split(",");
+		String[] ls = s.get(1).split(",");
 		for(String l : ls) {
 			Integer aux = Integer.parseInt(l);
 			res.add(aux);

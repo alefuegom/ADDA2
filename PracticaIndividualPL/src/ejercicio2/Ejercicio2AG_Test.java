@@ -7,29 +7,23 @@ import us.lsi.ag.ValuesInRangeProblemAG;
 import us.lsi.ag.agchromosomes.*;
 import us.lsi.ag.agchromosomes.ChromosomeFactory.ChromosomeType;
 import us.lsi.ag.agstopping.StoppingConditionFactory;
+import us.lsi.common.Files2;
 
 
 public class Ejercicio2AG_Test {
+	
+	public static Integer id =0;
 
 	public static void main(String[] args) {
 
 		getConditions();
-		Tarea t0 = new Tarea(5,0);
-		Tarea t1 = new Tarea(4,1);
-		Tarea t2 = new Tarea(6,2);
-		Tarea t3 = new Tarea(3,3);
-		Tarea t4 = new Tarea(2,4);
-		
-		List<Tarea> tareas = new ArrayList<Tarea>();
-		tareas.add(t0);
-		tareas.add(t1);
-		tareas.add(t2);
-		tareas.add(t3);
-		tareas.add(t4);
+		List<String> s = Files2.getLines("./ficheros/tareasProcesadores.txt");
+		List<Tarea> tareas = getTareas(s);
+		Integer procesadores = getNumProcesadores(s);
 		
 	
 		ValuesInRangeProblemAG<Integer, Map<Integer, List<Tarea>>> problem =
-				new Ejercicio2AG(tareas, 2);
+				new Ejercicio2AG(tareas, procesadores);
 		
 		AlgoritmoAG<RangeChromosome> alg = 
 				AlgoritmoAG.<RangeChromosome>create(ChromosomeType.Range, problem);
@@ -54,5 +48,23 @@ public class Ejercicio2AG_Test {
 		StoppingConditionFactory.FITNESS_MIN = 623;
 		StoppingConditionFactory.stoppingConditionType = StoppingConditionFactory.StoppingConditionType.SolutionsNumber;
 	}
+	
+	private static Integer getNumProcesadores(List<String> s) {
+		String ls = s.get(0);
+		return Integer.parseInt(ls);
+	}
+
+
+	private static List<Tarea> getTareas(List<String> s) {
+		List<Tarea> res = new ArrayList<Tarea>();
+		String[] ls = s.get(1).split(",");
+		for(String l : ls) {
+			Tarea aux = new Tarea(Integer.parseInt(l),id);
+			id = id+1;
+			res.add(aux);
+		}
+		return res;
+		}
+
 
 }
