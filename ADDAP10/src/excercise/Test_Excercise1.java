@@ -23,6 +23,7 @@ public class Test_Excercise1 {
 			System.out.println("Number of jumpings: "+a.getSolucion().size());
 		}
 		
+		a.showAllGraph("./ficheros/solucion.gv ", "JumpingSol");
 	}
 
 }
